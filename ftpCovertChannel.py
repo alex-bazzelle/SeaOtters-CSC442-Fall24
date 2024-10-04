@@ -1,13 +1,13 @@
 import ftplib
 
 # FTP connection variables
-FTP_HOST = "138.47.99.83"  # FTP host address or IP
+FTP_HOST = ""  # FTP host address or IP
 FTP_PORT = 21  # Default FTP port is 21, change if needed
 FTP_USER = "anonymous"  # FTP username
 FTP_PASS = ""  # FTP password, can be blank for anonymous
-FTP_DIR = "10/"  # Directory to initially browse to
-METHOD = 10  # Use 7 or 10 depending on the required method
-USE_PASSIVE = False  # set to False if the connection times out
+FTP_DIR = "/"  # Directory to initially browse to
+METHOD = 10 # Use 7 or 10 depending on the required method
+USE_PASSIVE = True  # set to False if the connection times out
 
 
 # Function to connect to FTP and retrieve file listings
@@ -51,7 +51,7 @@ def decode_permissions(files, method):
                 continue
             # Take the last 7 bits
             bits = permissions[3:]
-        if method == 10:
+        elif method == 10:
             # Use all 10 bits
             bits = permissions
         else:  # Invalid method
