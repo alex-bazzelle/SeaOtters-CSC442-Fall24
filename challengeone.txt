@@ -1,0 +1,3 @@
+Challenge one documentation
+
+We started by using gedit on the beginning file and replacing every "zero" with "0" and every "one" with "1"
