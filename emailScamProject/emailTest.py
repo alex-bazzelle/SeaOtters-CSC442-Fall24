@@ -3,12 +3,14 @@ from email.mime.text import MIMEText
 import smtplib
 import os
 
+# Notes: For testing purposes, change your desired email to your class email as I cant 2fa everyone into the scamproject email, but it should still
+#   work with the app password to send emails
 # Define email details
 FROM = 'ascamprojectforclass@gmail.com'
-TO = ["czu002@email.latech.edu"]  # lList of emails
+TO = ["ascamprojectforclass@gmail.com"]  # lList of emails
 SUBJECT = "URGENT DATA BREACH!"
 
-targetName = "Cole"
+targetName = "Victum"
 
 with open("emailScamProject/script.html", 'r') as file:
     scriptText = file.read().format(name=targetName)
