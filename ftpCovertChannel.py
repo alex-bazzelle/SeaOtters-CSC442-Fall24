@@ -6,7 +6,7 @@ FTP_PORT = 21  # Default FTP port is 21, change if needed
 FTP_USER = "anonymous"  # FTP username
 FTP_PASS = ""  # FTP password, can be blank for anonymous
 FTP_DIR = "/"  # Directory to initially browse to
-METHOD = 10 # Use 7 or 10 depending on the required method
+METHOD = 10  # Use 7 or 10 depending on the required method
 USE_PASSIVE = True  # set to False if the connection times out
 
 
