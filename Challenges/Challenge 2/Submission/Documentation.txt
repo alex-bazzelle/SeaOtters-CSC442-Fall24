@@ -1,10 +1,12 @@
 1. Unlocked "provided.zip" with 'passw0rd' after multiple different guesses.
 2. Unzipped "provided.zip" to view its contents.
 ***The next part will have to do with the executable and patching it, but I wasn't super involved with that part so need someone else to add to anything I do write, adjust the numbered list as needed***
-3. EXECUTABLE STUFF (1.exe)
-4. Figured out the ftp address 138.47.99.158 and logged in as anonymous.
+3. Executing 1.exe lead to the realization it opened a certain date, and the date was got with system time. By changing our dates on our VM using sudo date MMDDhhmmYYYY
+4. This resulted in us figuring out the ftp address 138.47.99.158 and logged in as anonymous.
 5. Used ftpCovertChannel.py on the ftp server and given an output telling us to login again but with a specific username and password.
 6. Logged back into the ftp server, this time with username 'zeus' and password 'releasethekraken'.
+7. logging in revealed nothing, but using ls -al it revealed a file, which lead down a string of files resulting in finding a .exe and a .class file.
+8. using get we downloaded the files onto our pc. opening it revealed it was locked by a password, so we utilized cutter to switch the incorrect and correct password trigger, resulting in every password being correct but 1.
 ***Another part I don't know specifics about but our discord channel had this sent by Coleman: get 2.exe cutter 2.exe reverse polarity***
 7. MORE EXECUTABLE STUFF (2.exe)
 8. Got the hash value: '1b568753dbd11c8fd64489fe8f8b71c1b07ea48e5584b4d2307f9642d1b3bbca' that will be used later.
@@ -20,3 +22,4 @@
 Contributions:
 
 Ernesto: I provided 'ftpCovertChannel.py', the reflection 'Hint.java' that I then used to invoke 'superprivatefunction' and eventually get the hint the program had to give us, along with 'PasswordFinder.java' to get the final password we needed. The ftp server still does not seem to like my machine trying to connect to it and still trying to figure that part out.
+Coleman: I suggested changing time to figure out the time password. The time password allowed me to connect to the ftp and find the directory to decode using ftpCovertChannel.py. this resulted in finding the user and password, and after connecting when it was realized there where hidden files, I found the files where nested in eachother resulting in finding exe.2. I then found HINT.class buried down 2 more layers which was used to solve the challenge.
