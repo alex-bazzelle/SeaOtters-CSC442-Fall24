@@ -1,20 +1,17 @@
 1. Unlocked "provided.zip" with 'passw0rd' after multiple different guesses.
 2. Unzipped "provided.zip" to view its contents.
-***The next part will have to do with the executable and patching it, but I wasn't super involved with that part so need someone else to add to anything I do write, adjust the numbered list as needed***
 3. Executing 1.exe lead to the realization it opened a certain date, and the date was got with system time. By changing our dates on our VM using sudo date MMDDhhmmYYYY
 4. This resulted in us figuring out the ftp address 138.47.99.158 and logged in as anonymous.
 5. Used ftpCovertChannel.py on the ftp server and given an output telling us to login again but with a specific username and password.
 6. Logged back into the ftp server, this time with username 'zeus' and password 'releasethekraken'.
 7. logging in revealed nothing, but using ls -al it revealed a file, which lead down a string of files resulting in finding a .exe and a .class file.
-8. using get we downloaded the files onto our pc. opening it revealed it was locked by a password, so we utilized cutter to switch the incorrect and correct password trigger, resulting in every password being correct but 1.
-***Another part I don't know specifics about but our discord channel had this sent by Coleman: get 2.exe cutter 2.exe reverse polarity***
-7. MORE EXECUTABLE STUFF (2.exe)
-8. Got the hash value: '1b568753dbd11c8fd64489fe8f8b71c1b07ea48e5584b4d2307f9642d1b3bbca' that will be used later.
-9. Got the Reflection java code for Hint.class
-10. In the java code: got declared method 'superprivatefunction' --> set accessibility to true for 'superprivatefunction' --> invoked 'superprivatefunction'
-11. Function worked but the output was only 'hint:' for a while until realizing it was 5 characters and there was the variable 'length' set to 5 in the class, and after setting that variable to an arbitrarily large, the output read as: 'hint: You are so close. You should have received  a sha256 hash of the final password you'll need to open the pdf. The actual password is actually a concatenation of two of the top 100  passwords of 2022 separated by a 2 digit number. An example of such a password would be password05qwerty A list can be found at: https://tinyurl.com/ee58bacp You should be able to write a quick script to hash all possible combinations of those passwords and digits and compare it to the provided hash in order to find the correct final password to unlock the pdf'
-12. Using 'PasswordFinder.java' we got the output: 'Password found: access24master'
-13. Inputting the password 'access24master' into 'Final.pdf' allowed us to view what we saved as 'Final.png'
+8. using "get" we downloaded the files onto our pc. opening it revealed it was locked by a password, so we utilized cutter to switch the incorrect and correct password trigger, resulting in every password being correct but 1.
+9. Got the hash value: '1b568753dbd11c8fd64489fe8f8b71c1b07ea48e5584b4d2307f9642d1b3bbca' that will be used later.
+10. Got the Reflection java code for Hint.class
+11. In the java code: got declared method 'superprivatefunction' --> set accessibility to true for 'superprivatefunction' --> invoked 'superprivatefunction'
+12. Function worked but the output was only 'hint:' for a while until realizing it was 5 characters and there was the variable 'length' set to 5 in the class, and after setting that variable to an arbitrarily large, the output read as: 'hint: You are so close. You should have received  a sha256 hash of the final password you'll need to open the pdf. The actual password is actually a concatenation of two of the top 100  passwords of 2022 separated by a 2 digit number. An example of such a password would be password05qwerty A list can be found at: https://tinyurl.com/ee58bacp You should be able to write a quick script to hash all possible combinations of those passwords and digits and compare it to the provided hash in order to find the correct final password to unlock the pdf'
+13. Using 'PasswordFinder.java' we got the output: 'Password found: access24master'
+14. Inputting the password 'access24master' into 'Final.pdf' allowed us to view what we saved as 'Final.png'
 
 
 
@@ -24,3 +21,4 @@ Contributions:
 Ernesto: I provided 'ftpCovertChannel.py', the reflection 'Hint.java' that I then used to invoke 'superprivatefunction' and eventually get the hint the program had to give us, along with 'PasswordFinder.java' to get the final password we needed. The ftp server still does not seem to like my machine trying to connect to it and still trying to figure that part out.
 Coleman: I suggested changing time to figure out the time password. The time password allowed me to connect to the ftp and find the directory to decode using ftpCovertChannel.py. this resulted in finding the user and password, and after connecting when it was realized there where hidden files, I found the files where nested in eachother resulting in finding exe.2. I then found HINT.class buried down 2 more layers which was used to solve the challenge.
 Milo:  I ran the provided.zip file through a password cracker, though I was not the one to crack the password.  I had to get help from Ernesto to get cutter working on my primary machine as my VM would force the primary system to reboot upon running it. After we got cutter working on my laptop, I ran it on 1.exe, though I was not the one that found out what we needed to do with it to continue. I had work after class, and was not able to join the group to finish the challenge after class.
+Alex: I found the command to change the time for 1.exe. I also suggested that there might be hidden files after an initial investigation of the ftp server with user zeus showed nothing. Coleman and I worked together to find all of the files from that server. Me, Ernesto, and Gunter were able to stay after class to finish the challenge.
