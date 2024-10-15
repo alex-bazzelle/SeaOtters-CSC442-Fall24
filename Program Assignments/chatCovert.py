@@ -1,19 +1,18 @@
 import socket
 from sys import stdout
-from time import time
+from time import sleep, time
 
 # CHAT SERVER
 ip = "138.47.99.83"
 port = 31337
 # DELAY LIMIT
-delayLimit = 0.045
+delayLimit = 0.085
 
 # connect to server
 stdout.write("[connecting to chat server]\n")
 chat = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 chat.connect((ip,port))
 stdout.write(".....\n")
-
 data = chat.recv(4096).decode() # get first data
 dataList = [] # TESTING
 delays=[] # make list of delays
@@ -21,7 +20,7 @@ while( data.rstrip("\n") != "EOF" ): # while not EOF
     while(len(data)>1): # in case it was too fast
         stdout.write(data[0]); stdout.flush()
         dataList.append(data[0]) # TESTING
-        delays.append(0)
+        # delays.append(0)  # THIS IS WHAT BROKE EVERYTHING
         data = data[1:]
     dataList.append(data) #TESTING
     stdout.write(data) # print chat to stdout
@@ -30,10 +29,13 @@ while( data.rstrip("\n") != "EOF" ): # while not EOF
     t0 = time() # start time
     data = chat.recv(4096).decode() # wait for message
     t1 = time() # end time
-
+    stdout.write( "\n=-=-={} - {} = {}=-=-=\n ".format(round(t1,3),round(t0,3), round(t1-t0, 3)))
+    sleep(0.01)
     delta = round(t1-t0, 3) # find the delay
-
+    # stdout.write("\nstoring {}\\\n".format(delta))
     delays.append(delta) # add to list of delays
+    # stdout.write("What was stored: {}".format(delays[-1]))
+    
 
 chat.close()
 stdout.write("\n[disconneting from chat server]\n")
@@ -43,9 +45,11 @@ stdout.write("Data:\n{}".format(dataList)) # TESTING
 # i'll make this code better after it works
 message1 = ""
 message2 = ""
+
 for delt in delays:
     if(delt > delayLimit): message1 += "1"
     else: message1 += "0"
+        
 
 for delt in delays:
     if(delt > delayLimit): message2 += "0"
