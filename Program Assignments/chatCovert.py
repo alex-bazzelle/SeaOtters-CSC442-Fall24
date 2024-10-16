@@ -1,96 +1,56 @@
 import socket
 from sys import stdout
-from time import sleep, time
+from time import time
 
-# CHAT SERVER
+##########################
 ip = "138.47.99.83"
 port = 31337
-# DELAY LIMIT
-delayLimit = 0.085
+
+delayLimit = 0.05
+
+byteSize = 8
+##########################
 
 # connect to server
-stdout.write("[connecting to chat server]\n")
+stdout.write("[connecting to chat server]\n\n")
 chat = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 chat.connect((ip,port))
-stdout.write(".....\n")
-data = chat.recv(4096).decode() # get first data
-dataList = [] # TESTING
-delays=[] # make list of delays
-while( data.rstrip("\n") != "EOF" ): # while not EOF
-    while(len(data)>1): # in case it was too fast
-        stdout.write(data[0]); stdout.flush()
-        dataList.append(data[0]) # TESTING
-        # delays.append(0)  # THIS IS WHAT BROKE EVERYTHING
-        data = data[1:]
-    dataList.append(data) #TESTING
-    stdout.write(data) # print chat to stdout
-    stdout.flush()
 
+# get delays
+delays = []
+data = chat.recv(4096).decode() # get first data
+while( data.rstrip("\n") != "EOF" ): # while not EOF
+    stdout.write(data); stdout.flush() # print chat to stdout
+
+    while(len(data)>1): # if delay was effectively 0
+        delays.append(0) # then fix that
+        data = data[1:]
+    
     t0 = time() # start time
     data = chat.recv(4096).decode() # wait for message
     t1 = time() # end time
-    stdout.write( "\n=-=-={} - {} = {}=-=-=\n ".format(round(t1,3),round(t0,3), round(t1-t0, 3)))
-    sleep(0.01)
+
     delta = round(t1-t0, 3) # find the delay
-    # stdout.write("\nstoring {}\\\n".format(delta))
     delays.append(delta) # add to list of delays
-    # stdout.write("What was stored: {}".format(delays[-1]))
-    
 
+# disconnect from server
+stdout.write("\n[disconneting from chat server]\n"); stdout.flush()
 chat.close()
-stdout.write("\n[disconneting from chat server]\n")
-stdout.flush()
 
-stdout.write("Data:\n{}".format(dataList)) # TESTING
-# i'll make this code better after it works
-message1 = ""
-message2 = ""
-
+# try both combinations
+message = ["",""]
 for delt in delays:
-    if(delt > delayLimit): message1 += "1"
-    else: message1 += "0"
-        
+    message[0] += "1" if delt>delayLimit else "0"
+    message[1] += "0" if delt>delayLimit else "1"
 
-for delt in delays:
-    if(delt > delayLimit): message2 += "0"
-    else: message2 += "1"
+# decode the message
+decodedMessage = ["",""]; byte = ["",""]
+for version in range (0,2): # for each version
+    for i in range(0,len(message[version]),byteSize): # for each byte
+        byte[version] = message[version][i:(i+byteSize)] # isolate the byte
+        if( 32 <= int(byte[version],2) <= 126 ): # if printable ascii character
+            decodedMessage[version] += chr(int(byte[version],2)) # add to decoded message
 
-# TESTING
-stdout.write("\nMessage Length: {}\nB1: {}\nB2: {}\n".format(len(message1),message1,message2))
+# print decoded message
+stdout.write("[V1] {}\n[V2] {}\n".format(decodedMessage[0],decodedMessage[1]))
 stdout.flush()
-
-
-decodedMessage = ["8-bit: ","7-bit: "]
-
-for asciiBits in range(7,9): # tries 7 and 8 bit ascii
-    stdout.write("\n\n{}-bit Binary (type1):\n".format(asciiBits))
-    #if(len(message)%asciiBits == 0): # neither works :(
-    for i in range(0,len(message1),asciiBits): # 0 to end of message, increments in 7s or 8s
-        byte = message1[i:(i+asciiBits)] # isolate the byte
-        stdout.write("Byte: {} ".format(byte)); stdout.flush() # TESTING
-        if( (int(byte,2) >= 32) and (int(byte,2) <= 126) ): # if printable ascii character
-            decodedMessage[8-asciiBits] += chr(int(byte,2)) # add to decoded message
-            stdout.write("({})".format(chr(int(byte,2)))); stdout.flush() # TESTING
-        else:
-            pass
-        stdout.write("\n"); stdout.flush()
-
-# i will also fix this after it works. this tries swapping the 1s and 0s
-for asciiBits in range(7,9): # tries 7 and 8 bit ascii
-    stdout.write("\n\n{}-bit Binary (type2):\n".format(asciiBits))
-    #if(len(message)%asciiBits == 0):
-    for i in range(0,len(message2),asciiBits):
-        byte = message2[i:(i+asciiBits)]
-        stdout.write("Byte: {} ".format(byte))
-        stdout.flush()
-        if( (int(byte,2) >= 32) and (int(byte,2) <= 126) ):
-            decodedMessage[8-asciiBits] += chr(int(byte,2))
-            stdout.write("({})".format(chr(int(byte,2))))
-            stdout.flush()
-        else:
-            pass
-        stdout.write("\n"); stdout.flush()
-
-# uncomment this when it works
-#stdout.write("Covert message: {}\n".format(decodedMessage))
-#stdout.flush()
