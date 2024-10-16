@@ -44,13 +44,20 @@ for delt in delays:
     message[1] += "0" if delt>delayLimit else "1"
 
 # decode the message
-decodedMessage = ["",""]; byte = ["",""]
+decodedMessage = ["",""]; byte = ["",""]; finalMessage = ""
 for version in range (0,2): # for each version
     for i in range(0,len(message[version]),byteSize): # for each byte
         byte[version] = message[version][i:(i+byteSize)] # isolate the byte
         if( 32 <= int(byte[version],2) <= 126 ): # if printable ascii character
-            decodedMessage[version] += chr(int(byte[version],2)) # add to decoded message
+            decodedMessage[version] += chr(int(byte[version],2)) # then add to decoded message
+            if decodedMessage[version].endswith("EOF"): # if EOF
+                finalMessage = decodedMessage[version][:-3] # then make final message
+                break # and stop decoding
+
+if finalMessage == "": # if no EOF
+    finalMessage = "ERROR DECODING. CURRENT MESSAGE: " # say error and what you DID get
+    finalMessage += decodedMessage[0] if len(decodedMessage[0])>len(decodedMessage[1]) else decodedMessage[1]
 
 # print decoded message
-stdout.write("[V1] {}\n[V2] {}\n".format(decodedMessage[0],decodedMessage[1]))
+stdout.write("{}\n".format(finalMessage))
 stdout.flush()
