@@ -1,11 +1,16 @@
 """=== Imports ==="""
 import sys  # System-specific parameters and functions
 import argparse  # Parser for command-line options, arguments and sub-commands
+import os  # Miscellaneous operating system interfaces
 
 """=== Constants ==="""
-SENTINEL = bytearray([0x00, 0xFF, 0x00, 0x00, 0xFF, 0x00])  # Sentinel value
+SENTINEL = bytearray([0x0, 0xff, 0x0, 0x0, 0xff, 0x0])  # Sentinel value
 
 """=== Methods ==="""
+
+
+def calculate_optimal_interval(wrapper_size, hidden_size, offset, sentinel_size=6):
+    return (wrapper_size - offset) // (hidden_size + sentinel_size)  # Calculate optimal interval
 
 
 def store_byte_method(wrapper, hidden, offset, interval):  # Store data using byte method
@@ -97,6 +102,12 @@ def main():  # Main method
     except FileNotFoundError:  # Handle file not found error
         print("Error: Wrapper file not found.")  # Print error message
         sys.exit(1)  # Exit program
+
+    if args.s and args.B and args.i is None:
+        # If interval is not provided, calculate it
+        wrapper_size = os.path.getsize(args.w)  # Get size of wrapper file
+        hidden_size = os.path.getsize(args.hf)  # Get size of hidden file
+        args.i = calculate_optimal_interval(wrapper_size, hidden_size, args.o)  # Calculate optimal interval
 
     if args.s:  # Store mode
         if args.hf is None:  # Check if hidden file provided
