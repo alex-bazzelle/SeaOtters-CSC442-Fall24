@@ -68,19 +68,26 @@ def store_bit_method(wrapper, hidden, offset):  # Store data using bit method
     return wrapper  # Return wrapper with hidden data
 
 
-def retrieve_bit_method(wrapper, offset):  # Retrieve data using bit method
+def retrieve_bit_method(wrapper, offset, interval):  # Retrieve data using bit method
     hidden = bytearray()  # Initialize hidden data
     while offset < len(wrapper):  # Loop through wrapper
         byte = 0  # Initialize byte
+
+        # Debug: Print bytes being read (remove in production)
+        print(f"Reading byte at offset {offset}: {byte:02x}")
+        # Debug: Sentinal bytes (remove in production)
+        print(f"Sentinel bytes: {SENTINEL}")
+
         for i in range(8):  # Loop through bits in byte
             byte |= (wrapper[offset] & 0b00000001)  # Get LSB
             if i < 7:  # Check if not final bit
                 byte <<= 1  # Shift left if not final bit
-            offset += 1  # Move to next offset
+                offset += interval  # Move to next offset
         # Check for sentinel match
         if hidden[-len(SENTINEL):] == SENTINEL:  # Check if sentinel detected
             return hidden[:-len(SENTINEL)]  # Return without sentinel
         hidden.append(byte)  # Add byte to hidden data
+        offset += interval  # Move to next offset
     return hidden  # Return hidden data
 
 
@@ -136,7 +143,7 @@ def main():  # Main method
         if args.B:  # Byte method
             hidden = retrieve_byte_method(wrapper, args.o, args.i)  # Retrieve data using byte method
         elif args.b:  # Bit method
-            hidden = retrieve_bit_method(wrapper, args.o)  # Retrieve data using bit method
+            hidden = retrieve_bit_method(wrapper, args.o, args.i)  # Retrieve data using bit method
         else:  # No method specified
             print("Error: Specify either -b (bit) or -B (byte) mode.")  # Print error message
             sys.exit(1)  # Exit program
