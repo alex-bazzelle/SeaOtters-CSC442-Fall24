@@ -32,7 +32,9 @@ def retrieve_byte_method(wrapper, offset, interval):  # Retrieve data using byte
         byte = wrapper[offset]  # Get byte from wrapper
 
         # Debug: Print bytes being read (remove in production)
-        # print(f"Reading byte at offset {offset}: {byte:02x}")
+        print(f"Reading byte at offset {offset}: {byte:02x}")
+        # Debug: Sentinal bytes (remove in production)
+        print(f"Sentinel bytes: {SENTINEL}")
 
         # Check for sentinel match
         if byte == SENTINEL[i]:  # Check if byte matches sentinel
