@@ -1,9 +1,9 @@
 Commands and Options
 
 Basic Syntax
-python Steg.py -[s/r] -[b/B] -o <offset> [-i <interval>] -w <wrapper> [-hf <hidden file>]
+python Steg.py -[s/r] -[b/B] -o<offset> [-i<interval>] -w <wrapper> [-hf <hidden file>]
 
-
+- `-h` : Help - shows the help menu and basic usage
 - `-s` : Store mode – hides data in the wrapper file
 - `-r` : Retrieve mode – extracts hidden data from the wrapper file
 - `-b` : Bit method – stores data bit-by-bit in the least significant bits
