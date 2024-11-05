@@ -2,15 +2,16 @@
 import sys  # System-specific parameters and functions
 import argparse  # Parser for command-line options, arguments and sub-commands
 import os  # Miscellaneous operating system interfaces
+import math
 
 """=== Constants ==="""
-SENTINEL = bytearray([0x0, 0xff, 0x0, 0x0, 0xff, 0x0])  # Sentinel value
+SENTINEL = bytearray([0x00, 0xFF, 0x00, 0x00, 0xFF, 0x00])  # Sentinel value
 
 """=== Methods ==="""
 
 
 def calculate_optimal_interval(wrapper_size, hidden_size, offset, sentinel_size=6):
-    return (wrapper_size - offset) // (hidden_size + sentinel_size)  # Calculate optimal interval
+    return math.floor(wrapper_size - offset) // (hidden_size + sentinel_size)  # Calculate optimal interval
 
 
 def store_byte_method(wrapper, hidden, offset, interval):  # Store data using byte method
@@ -32,15 +33,15 @@ def retrieve_byte_method(wrapper, offset, interval):  # Retrieve data using byte
         byte = wrapper[offset]  # Get byte from wrapper
 
         # Debug: Print bytes being read (remove in production)
-        print(f"Reading byte at offset {offset}: {byte:02x}")
+        # print(f"Reading byte at offset {offset}: {byte:02x}")
         # Debug: Sentinal bytes (remove in production)
-        print(f"Sentinel bytes: {SENTINEL}")
+        # print(f"Sentinel bytes: {SENTINEL}")
 
         # Check for sentinel match
         if byte == SENTINEL[i]:  # Check if byte matches sentinel
             i += 1  # Move to next byte in sentinel
             if i == len(SENTINEL):  # Check if sentinel fully matched
-                print("Sentinel detected. Ending retrieval.")  # Print message
+                # print("Sentinel detected. Ending retrieval.")  # Print message
                 return hidden  # Sentinel fully matched, return data
         else:  # Byte does not match sentinel
             if i > 0:  # Check if partial match
@@ -74,21 +75,25 @@ def retrieve_bit_method(wrapper, offset, interval):  # Retrieve data using bit m
         byte = 0  # Initialize byte
 
         # Debug: Print bytes being read (remove in production)
-        print(f"Reading byte at offset {offset}: {byte:02x}")
+        # print(f"Reading byte at offset {offset}: {byte:02x}")
         # Debug: Sentinal bytes (remove in production)
-        print(f"Sentinel bytes: {SENTINEL}")
+        # print(f"Sentinel bytes: {SENTINEL}")
 
         for i in range(8):  # Loop through bits in byte
             byte |= (wrapper[offset] & 0b00000001)  # Get LSB
-            if i < 7:  # Check if not final bit
-                byte <<= 1  # Shift left if not final bit
-                offset += interval  # Move to next offset
-        # Check for sentinel match
+            if i < 7:  # Check if not final bit  
+                byte <<= 1  # Shift left
+                offset += interval  # Move to next bit
+        
+        offset += interval  # Move to next byte
+        hidden.append(byte)  # Add byte to hidden data
+
         if hidden[-len(SENTINEL):] == SENTINEL:  # Check if sentinel detected
             return hidden[:-len(SENTINEL)]  # Return without sentinel
-        hidden.append(byte)  # Add byte to hidden data
-        offset += interval  # Move to next offset
-    return hidden  # Return hidden data
+       
+
+
+    return hidden  # Can never run as without hitting sentinal it would break entirely
 
 
 def main():  # Main method
@@ -149,6 +154,7 @@ def main():  # Main method
             sys.exit(1)  # Exit program
 
         sys.stdout.buffer.write(hidden)  # Write hidden data to standard output
+        sys.stdout.flush() 
     else:  # No mode specified
         print("Error: Specify either -s (store) or -r (retrieve) mode.")  # Print error message
         sys.exit(1)  # Exit program
