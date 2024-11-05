@@ -71,6 +71,7 @@ def store_bit_method(wrapper, hidden, offset):  # Store data using bit method
 
 def retrieve_bit_method(wrapper, offset, interval):  # Retrieve data using bit method
     hidden = bytearray()  # Initialize hidden data
+    sentinel_index = 0  # Initialize sentinel index
     while offset < len(wrapper):  # Loop through wrapper
         byte = 0  # Initialize byte
 
