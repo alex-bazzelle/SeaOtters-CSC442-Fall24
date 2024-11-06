@@ -1,0 +1,20 @@
+Process:
+1. Unlocked provided-1.zip using the passcode: `passw0rd'.
+2. Did base64 --> plain text on the name's of the files inside the provided folder which gave us the information for the ftp server address along with the epoch we needed to use.
+2a. `IP: 138.47.99.228` from `SVA6IDEzOC40Ny45OS4yMjg=`
+2b. `Epoch: 2019 05 08 10 00 00` from `RXBvY2g6IDIwMTkgMDUgMDggMTAgMDAgMDA=`
+3. Used `timelock.py` with provided epoch and followed the information for the user and password that was said in the challenge pdf.
+3a. Username: `dory`
+3b. Password: `doryXXXXY`, with the XXXXY being our results from `timelock.py`
+4. On the ftp server we retrieved the hidden files using the command `mget *`.
+5. Used the hidden files with our XOR Crypto program to unlock `decrypted.png`.
+6. Used `steg.py` on the remaining images and files to unlock their messages, resulting in `test2.jpg` using `python Steg.py -r -B -o2048 -i8 -w decrypted.png > test.jpg` & `test.txt` using `python Steg.py -r -b -o513 -i2 -w decrypted.png > test.txt`.
+7. Noticed `test.txt` could give us a secret passphrase using the letters of the misspelled words.
+8. The Secret Passphrase is JALAPENO CHEESE SOUP
+
+__________________________________________________
+Contributions:
+Coleman: I mostly spent my time troubleshooting our steg file, before realizing it was the terminal not correctly directing using '>'. I decrypted the life alert image to produce the cyber image and the constitution text. After the constitution text was found I attempted to decrypt it using steg but it was completed manually to get the secret passphrase.
+Milo: I provided the timelock program. I ran the program for the challenge to get the time codes needed to get into the ftp server. 
+Alex Bazzelle: I decrypted names of the first two files that we were provided. On the day of the challenge, I tried to figure out why the timelock program wasn't working. Eventually after class I found that I did not code the intervals correctly. Once I fixed that, I shared it with my team so that someone could find the files on the ftp server. I ran the XOR program to find the first hidden image. After my teammates used the steg program on the images, I looked into the constitution text. I discovered that the letters of the mispelled words created the passphrase.
+Ernesto Auerbach: Provided `steg.py`, but spent a lot of time on challenge day troubleshooting steg program because I thought it wasn't working properly, but it was just a terminal issue. Once we were eventually able to figure out the timelock issues and gain access to the ftp server, I used `mget *` in the terminal to retrieve the hidden files and then shared it with the rest of my team. And then finished with helping to set up our step process for the challenge.
