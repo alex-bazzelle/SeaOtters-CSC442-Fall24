@@ -1,0 +1,42 @@
+Step 1: Convert binary from paper to ascii
+- Started by trying to scan it with our phones, but the font made that difficult
+- Ended up typing it manually. We numbered the lines and split them up to do this faster
+- As we were converting the final binary string to ascii, the pdf was posted to Discord
+- Result: "FTP at 138.47.99.228 - port 21 - user is salt - pass is saltXXXXY - where XXXX is a TimeLock code and Y is the last character of the final TimeLock hash - TimeLock epoch is 2023-11-03 00:00:00 - sync your time using telnet or netcat on port 54321"
+
+Step 2: Get into the FTP server
+- "ftp salt@138.47.99.228" to get to the password prompt
+- Ran the TimeLock program with the epoch "2023-11-03 00:00:00" to get the code for the password
+- Once inside the FTP server, we used "mget *" to download all of the files
+- Result: Ten .bmp files
+
+Step 3: Steg
+- Looked through the images and noticed that the file starting with 8e had a steg pattern
+- Noticed that the dimensions of a1 had a power of two (1024)
+- Noticed that the dimensions of 3c and ae had two powers of two (3264)
+- Ran "python Steg.py -r -B -o1024 -i32 -w 8eae85f742a86c659a553d61cfa9b97a.bmp > text.txt"
+- Result: Text file with "Ignoreeverythingthat'snotbinary" repeated and a binary string
+
+Step 4: Vigenère
+- The binary used ascii to spell out "A cipher that starts with a V.  Use it as a key to help you!  Bw hepo ks opk frkzriqtk bj klda ilnpciiok avxy y:kmvtrv g:tzxvie.  Xyii okx glv hzuurf slx."
+- Vigenère cipher starts with a V and has a key. "Use it as a key" implies that the key for the Vigenère cipher is "vigenere"
+- Result: "Go back to the beginning of this challenge with u:pepper p:pepper. Then get the demons out"
+
+Step 5: FTP part 2
+- Logged into the FTP server from the start (138.47.99.228) with the username "pepper" and password "pepper"
+- Used "mget *" to download all files
+- Both files were the exact same size and relatively small, so we tried the XOR cipher
+- The XORed file had GIF headers, so we made them .gif (the file is xor.gif)
+- Result: image saying "Go back to the beginning of this challenge with u:garlicpowder p:garlic powder"
+
+Step 6: Conclusion
+- Logged into the FTP server with the username and password "garlicpowder"
+- Used "mget *" and got one small file named "conclusion"
+- Converted conclusion to a .txt file
+- That file asked what the smallest fish in the world was
+- Result: Paedocypris progenetica
+THE ANSWER TO THE FINAL QUESTION IS: Paedocypris progenetica
+----------------------------------------------------------------------------
+CONTRIBUTIONS
+Coleman: Assisted with initial binary decoding. Utilizied steg to get the hidden message from one of the images, used XOR to get the gif directing us back to the beginning, and helping find the smallest fish to answer the final question
+Alex Bazzelle: I altered the TimeLock program to get the initial password. I also worked with the result of the steg to get the "pepper" login. I tried to use the XOR program in Windows and was able to tell that it was a .gif file, but could not actually load the image.
