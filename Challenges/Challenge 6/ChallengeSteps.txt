@@ -40,3 +40,4 @@ THE ANSWER TO THE FINAL QUESTION IS: Paedocypris progenetica
 CONTRIBUTIONS
 Coleman: Assisted with initial binary decoding. Utilizied steg to get the hidden message from one of the images, used XOR to get the gif directing us back to the beginning, and helping find the smallest fish to answer the final question
 Alex Bazzelle: I altered the TimeLock program to get the initial password. I also worked with the result of the steg to get the "pepper" login. I tried to use the XOR program in Windows and was able to tell that it was a .gif file, but could not actually load the image.
+Milo: I assisted in typing up the binary from the paper. I also provided the timelock code for the challenge. I went through and tried decoding the names of the files retrieved through the ftp server, but that didn't amount to much. Tried assisting with decrypting the rest as well.
