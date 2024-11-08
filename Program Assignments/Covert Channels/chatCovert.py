@@ -3,12 +3,12 @@ from sys import stdout
 from time import time
 
 ##########################
-ip = "138.47.99.83"
-port = 31337
+ip = "10.0.0.125"
+port = 12321
 
-delayLimit = 0.05
+delayLimit = 0.15
 
-byteSize = 8
+byteSize = 7
 ##########################
 
 # connect to server
