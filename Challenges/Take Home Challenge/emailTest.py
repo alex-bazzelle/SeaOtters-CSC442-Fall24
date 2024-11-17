@@ -4,7 +4,7 @@ import smtplib
 from openpyxl import load_workbook
 
 # Opens the victim list workbook
-workbook = load_workbook(filename="emailScamProject/victimList.xlsx")
+workbook = load_workbook(filename="emailScamProject/email_list.xlsx")
 sheet = workbook.active
 
 
